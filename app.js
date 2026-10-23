@@ -1,24 +1,14 @@
 
-
 const express = require("express");
 const path = require("path");
 require("dotenv").config();
 
-const connectDB = require("./db");
-const multer = require('multer');
 const cookieParser = require("cookie-parser");
-
-const upload=require("./Routers/upload")
-const studentApi = require("./Routers/studentApi");
-const { studentRegister } = require("./Controllers/studentController");
 
 const app = express();
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "Views"));
-
-
-
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -26,19 +16,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-connectDB();
-
-// Browser routes
-//app.post('/student/register', (req, res) => {
-   // res.send('Student registration page is working!');
-//});
 const studentRoutes = require("./Routers/studentroute");
 app.use("/", studentRoutes);
-//app.use("/api/students", studentApi);
 
-const PORT = process.env.PORT || 5000;
-
-
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+module.exports = app;
