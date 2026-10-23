@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 25px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    h1, h2 {
+      color: #222;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px #00000012;
+    }
+
+    .total {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2563eb;
+    }
+
+    form.add-form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    input, button {
+      padding: 11px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.85;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background: #1e293b;
+      color: white;
+    }
+
+    .student-img {
+      width: 55px;
+      height: 55px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .edit-link {
+      color: #2563eb;
+      text-decoration: none;
+      margin-right: 8px;
+    }
+
+    .delete-btn {
+      background: #dc2626;
+    }
+
+    .logout {
+      background: #dc2626;
+      margin-bottom: 20px;
+    }
+
+    .inline-form {
+      display: inline;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <h1>Admin Dashboard</h1>
+
+    <form action="/admin/logout" method="POST">
+      <button type="submit" class="logout">Logout</button>
+    </form>
+
+    <div class="card">
+      <h2>Student Overview</h2>
+      <p class="total">
+        Total Students: <%= students.length %>
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Add New Student</h2>
+
+      <form
+        class="add-form"
+        action="/admin/students/add"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <input
+          type="text"
+          name="username"
+          placeholder="Student Name"
+          required
+        >
+
+        <input
+          type="email"
+          name="email"
+          placeholder="Email Address"
+          required
+        >
+
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+        >
+
+        
+
+        
+
+        <input
+          type="file"
+          name="image"
+          accept="image/png,image/jpeg,image/webp"
+        >
+
+        <button type="submit">Add Student</button>
+      </form>
+    </div>
+
+    
+<div class="card">
+  <h2>Student Details</h2>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>S.No</th>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Course</th>
+          <th>Phone</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      
+<tbody>
+  <% if (typeof students !== "undefined" && students.length > 0) { %>
+
+    <% students.forEach((student, index) => { %>
+      <tr>
+        <td><%= index + 1 %></td>
+
+      <td>
+  <% if (student.image) { %>
+    <img
+      class="student-img"
+      src="<%= student.image %>"
+      alt="Student image"
+      onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';"
+    >
+    <span style="display:none;">Image not found</span>
+  <% } else { %>
+    No Image
+  <% } %>
+</td>
+        <td><%= student.username %></td>
+        <td><%= student.email %></td>
+
+        <td>
+          <a
+            class="edit-link"
+            href="/admin/students/edit/<%= student._id %>"
+          >Edit</a>
+
+          <form
+            class="inline-form"
+            action="/admin/students/delete/<%= student._id %>"
+            method="POST"
+            onsubmit="return confirm('Delete this student?');"
+          >
+            <button type="submit" class="delete-btn">
+              Delete
+            </button>
+          </form>
+        </td>
+      </tr>
+    <% }); %>
+
+  <% } else { %>
+    <tr>
+      <td colspan="5">No student records found.</td>
+    </tr>
+  <% } %>
+</tbody>
+
+    </table>
+  </div>
+</div>
+
+</body>
+</html>

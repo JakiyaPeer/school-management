@@ -1,0 +1,174 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            padding: 30px;
+        }
+
+        .card {
+            max-width: 550px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px #ddd;
+        }
+
+        h2 {
+            color: #2563eb;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 7px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 11px 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h2>Student Dashboard</h2>
+
+        <form id="studentForm">
+            <label>Name</label>
+            <input
+                type="text"
+                name="username"
+                value=""
+                required
+            >
+
+            <label>Email</label>
+            <input
+                type="email"
+                name="email"
+                value=""
+                required
+            >
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+
+    <script>
+        // Load student data
+        async function loadStudentDashboard() {
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+                window.location.href = "/login";
+                return;
+            }
+
+            try {
+                const response = await fetch("/api/studentdashboard", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    alert(data.message || "Unable to load dashboard");
+
+                    if (response.status === 401) {
+                        localStorage.removeItem("token");
+                        window.location.href = "/login";
+                    }
+                    return;
+                }
+
+                document.querySelector('[name="username"]').value =
+                    data.student.username || "";
+
+                document.querySelector('[name="email"]').value =
+                    data.student.email || "";
+
+            } catch (error) {
+                console.error("Dashboard error:", error);
+                alert("Unable to load student data");
+            }
+        }
+
+        // Save student data
+        document.getElementById("studentForm").addEventListener(
+            "submit",
+            async function (e) {
+                e.preventDefault();
+
+                const token = localStorage.getItem("token");
+
+                if (!token) {
+                    window.location.href = "/login";
+                    return;
+                }
+
+                const username =
+                    document.querySelector('[name="username"]').value;
+
+                const email =
+                    document.querySelector('[name="email"]').value;
+
+                try {
+                    const response = await fetch("/api/studentdashboard", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": "Bearer " + token
+                        },
+                        body: JSON.stringify({
+                            username: username,
+                            email: email
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        alert(data.message || "Updated successfully");
+                    } else {
+                        alert(data.message || "Update failed");
+                    }
+
+                } catch (error) {
+                    console.error("Update error:", error);
+                    alert("Server error");
+                }
+            }
+        );
+
+        loadStudentDashboard();
+    </script>
+</body>
+</html>
+```
