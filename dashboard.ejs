@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+    }
+
+    nav {
+      background: #1d4ed8;
+      padding: 18px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    nav h2 {
+      color: white;
+      margin: 0;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-weight: bold;
+    }
+
+    .container {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .container h1 {
+      color: #1d4ed8;
+    }
+
+    .card {
+      background: white;
+      max-width: 600px;
+      margin: 25px auto;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 3px 12px #ddd;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #e5e7eb;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <h2> Asna School </h2>
+
+    <div>
+      <a href="/student/dashboard">Home</a>
+<a href="/contact">Contact</a>
+<a href="/login">Login</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>Welcome to Asna School</h1>
+    <p>Your registration was successful.</p>
+
+    <div class="card">
+      <h2>Home</h2>
+      <p>Welcome to our School Management System.</p>
+      <p>Here you can access your student information.</p>
+    </div>
+
+    <div class="card" id="contact">
+      <h2>Contact Us</h2>
+      <p>Email: Asnaschool@example.com</p>
+      <p>Phone: 9876543210</p>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026  Asna School Management System</p>
+  </footer>
+
+</body>
+</html>
